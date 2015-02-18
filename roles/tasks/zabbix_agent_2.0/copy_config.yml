@@ -1,0 +1,9 @@
+---
+#- name: Backup the existing zabbix_agentd.conf
+#  copy: src=/etc/zabbix/zabbix_agentd.conf dest=/etc/zabbix/zabbix_agentd.conf_orig
+- name: Remove the existing zabbix_agentd.conf
+  file: path=/etc/zabbix/zabbix_agentd.conf state=absent
+- name: Copy the template
+  copy: src=../templates/zabbix_agentd.conf.j2 dest=/etc/zabbix/zabbix_agentd.conf owner=root group=root mode=0644
+- name: Change hostname parameter
+  lineinfile: dest=/etc/zabbix/zabbix_agentd.conf regexp=^Hostname= line=Hostname={{ inventory_hostname }}

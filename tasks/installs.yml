@@ -1,0 +1,61 @@
+---
+- name: Add necessary external repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+  - 'ppa:chris-lea/node.js'
+  - 'ppa:chris-lea/redis-server'
+  - 'ppa:brightbox/ruby-ng'
+  - 'ppa:libreoffice/libreoffice-4-2'
+
+- name: Uninstalls
+  apt: name={{ item }} state=absent
+  with_items:
+  - ruby-bundler
+
+- name: Install Baseline
+  apt: name={{ item }} update_cache=yes state=present
+  with_items:
+  - build-essential 
+  - git-core 
+  - curl
+  - libxslt-dev
+  - libxml2-dev
+  - python-software-properties
+  - python
+  - g++
+  - make
+  - graphicsmagick
+  - poppler-utils
+  - poppler-data
+  - ghostscript
+  - tesseract-ocr
+  - pdftk
+  - libreoffice
+  - imagemagick
+  - libmagickwand-dev
+  - phantomjs
+  - git
+  - nmap
+  - ntp
+  - libicu-dev
+  - redis-server
+  - nodejs
+  - ruby2.1
+  - ruby2.1-dev
+  - zsh
+  - python-httplib2
+  register: result
+
+- debug: msg="{{ ansible_distribution_version }}"
+  when: result is defined
+
+- name: Configure redis-server
+  lineinfile: dest=/etc/redis/redis.conf regexp='^slaveof' insertafter='slaveof <masterip> <masterport>' line='slaveof redis-master 6379'
+  notify:
+  - restart redis-server
+
+- name: Install bundler
+  gem: name=bundle state=present user_install=no
+
+- name: install god
+  gem: name=god state=present user_install=no

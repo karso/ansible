@@ -1,0 +1,19 @@
+---
+- name: Check for /etc/network/interfaces.d/eth0.cfg
+  stat: path=/etc/network/interfaces.d/eth0.cfg
+  register: eth0
+
+- name: Configure DNS suffix appending on eth0
+  lineinfile: dest=/etc/network/interfaces.d/eth0.cfg insertafter='^iface eth0 inet dhcp' line='dns-search {{ dns_suffix }}' regexp='^dns-search'
+  when: eth0.stat.exists == true
+  notify:
+  - restart interface
+
+- name: Configure DNS suffix appending on /etc/network/interfaces
+  lineinfile: dest=/etc/network/interfaces insertafter='^iface eth0 inet dhcp' line='dns-search {{ dns_suffix }}' regexp='^dns-search'
+  when: eth0.stat.exists == false
+  notify:
+  - restart interface
+
+- name: clean out /etc/hosts
+  template: src=etc_hosts.j2 dest=/etc/hosts

@@ -1,0 +1,11 @@
+---
+- include: remove_zabbix_agent.yml
+- include: remove_zabbix_sender.yml
+- include: remove_zabbix_repo.yml
+- include: add_zabbix_repo.yml
+- include: install_zabbix_agent.yml
+#- include: install_zabbix_sender.yml
+- include: copy_config.yml
+- notify:
+  - restart zabbix-agent
+

@@ -1,0 +1,5 @@
+---
+- name: Remove zabbix-repo
+  apt: name=zabbix-release state=absent
+- name: Remove zabbix repo files
+  file: path=/etc/apt/sources.list.d/repo_zabbix_com_zabbix_2_2_ubuntu_pool_main_z_zabbix_release.list state=absent

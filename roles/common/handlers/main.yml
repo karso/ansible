@@ -1,0 +1,9 @@
+---
+- name: run dhclient
+  command: /sbin/dhclient
+
+- name: restart redis-server
+  service: name=redis-server state=restarted
+
+- name: restart tomcat7
+  service: name=tomcat7 state=restarted

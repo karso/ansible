@@ -1,0 +1,8 @@
+---
+- name: Ensure correct port is in for pusher
+  lineinfile: line='proxy_pass http://pusher:8090;' regexp='proxy_pass http://pusher:8084' dest={{ item }}
+  with_first_found:
+  - /usr/local/nginx/conf/nginx.conf
+  - /opt/nginx/conf/nginx.conf
+  - /etc/nginx/nginx.conf
+  - /etc/nginx/conf.d/nginx.conf

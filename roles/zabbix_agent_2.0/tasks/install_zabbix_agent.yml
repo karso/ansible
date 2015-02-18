@@ -1,0 +1,3 @@
+---
+- name: Install zabbix-agent
+  apt: name=zabbix-agent state=present force=yes

@@ -1,0 +1,15 @@
+---
+- name: Oracle java accept license
+  debconf: name='oracle-java7-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: Add the oracle ppa
+  apt_repository: repo=ppa:webupd8team/java state=present
+
+- name: Remove openjdk
+  apt: pkg=openjdk-7-jdk state=absent purge=true
+
+- name: Install Oracle java
+  apt: pkg=oracle-java7-installer state=present
+
+- name: Update alternatives
+  alternatives: name=java path=/usr/lib/jvm/java-7-oracle/jre/bin/java

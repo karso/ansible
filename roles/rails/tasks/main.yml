@@ -1,0 +1,17 @@
+---
+- name: Add key for passenger
+  command: sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 561F9B9CAC40B2F7
+
+- name: Apt via https
+  apt: name=apt-transport-https state=present
+
+- name: Apt add passenger to list  
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger {{ansible_distribution_release}} main' state=present update_cache=yes  
+  
+- name: Install nginx
+  action: apt pkg={{ item }} state=installed
+  with_items:
+   - nginx-extras 
+   - passenger
+
+- include: conf_nginx.yml

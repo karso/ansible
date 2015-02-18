@@ -1,0 +1,12 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+  - name:  Stop adtest
+    ec2:
+      region: 'us-east-1'
+      state: 'stopped'
+      instance_ids: 'i-eb3b83c6'
+      aws_access_key: 'AKIAJWAUUWXD2G6MLZMA'
+      aws_secret_key: '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'

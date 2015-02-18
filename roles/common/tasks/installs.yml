@@ -1,0 +1,56 @@
+---
+- name: Add necessary external repos
+  apt_repository: repo={{ item }} state=present
+  with_items:
+  - 'ppa:chris-lea/node.js'
+  - 'ppa:chris-lea/redis-server'
+  - 'ppa:brightbox/ruby-ng'
+
+- name: Uninstall old ruby
+  apt: name=ruby1.9.1 state=absent
+
+- name: Install Baseline
+  apt: name={{ item }} update_cache=yes state=present
+  with_items:
+  - build-essential 
+  - git-core 
+  - curl
+  - libxslt-dev
+  - libxml2-dev
+  - python-software-properties
+  - python
+  - g++
+  - make
+  - graphicsmagick
+  - poppler-utils
+  - poppler-data
+  - ghostscript
+  - tesseract-ocr
+  - pdftk
+  - libreoffice
+  - imagemagick
+  - libmagickwand-dev
+  - phantomjs
+  - git
+  - nmap
+  - mongodb-clients
+  - libicu-dev
+  - redis-server
+  - nodejs
+  - openjdk-7-jre
+  - ruby2.1
+  - ruby2.1-dev
+
+- name: Configure redis-server
+  lineinfile: dest=/etc/redis/redis.conf regexp='slaveof redis-master' insertafter='slaveof <masterip> <masterport>' line='slaveof redis-master 6379'
+  notify:
+  - restart redis-server
+
+- name: update Java alternative
+  alternatives: name=java path=/usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
+
+- name: Install bundler
+  gem: name=bundle state=present user_install=no
+
+- name: install god
+  gem: name=god state=present user_install=no

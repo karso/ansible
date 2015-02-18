@@ -1,0 +1,107 @@
+---
+- name: Add www user
+  # Password generated with this command: python -c "from passlib.hash import sha512_crypt; print sha512_crypt.encrypt('password')"
+  user: name=www shell=/bin/bash state=present groups=sudo append=yes password='$6$rounds=100000$dROAvDncUW35f97l$NkOkAk5KNWLJRla/73SJfoplhYu2C7vbf17xytBY1rjPJagvYt5FichKPjrrYGK0nHDRq4KJNv16heWMlvWO5/'
+  tags: users
+
+#- name: Add Timmah user
+  # Password generated with this command: python -c "from passlib.hash import sha512_crypt; print sha512_crypt.encrypt('password')"
+ # user: name=tquach shell=/bin/bash state=present groups=sudo append=yes password='$6$rounds=100000$B1etAd358dtgOJtv$FVpTJV2eeiAqvtL05NVbyqd8aom5oXUewhDXBBAM6Q5djIXzFiCVIrwkO0YkD6s75zLTF7.tshVPA1lh0TXjf1'
+ # when: "'logstash' in group_names"
+ # register: timmah
+
+
+# - name: Remove Timmah user from non-logstash hosts
+#   # Password generated with this command: python -c "from passlib.hash import sha512_crypt; print sha512_crypt.encrypt('password')"
+#   user: name=tquach  state=absent
+#  # when: "'logstash' not in group_names"
+
+- name: Remove all but kaybus.pem from ubuntu user
+  template: src=ubuntu_auth_key.j2 
+            dest=/home/ubuntu/.ssh/authorized_keys
+            owner=ubuntu
+            group=ubuntu
+            mode=0600
+  tags: users
+
+- name: ensure public key is in authorized_keys
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=ubuntu
+    state=present
+  with_fileglob:
+  - keys/Devops/*
+  tags: users
+
+- name: ensure public key is in authorized_keys
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=www
+    state=present
+  with_fileglob:
+  - keys/Devops/*
+  tags: users
+
+- name: Add epalani to mongo and solrcloud machines
+  authorized_key:
+    key="{{ item }}"
+    user=www
+    state=present
+  with_file: keys/infrastructure/epalani.pub
+  when: ('mongo' in group_names or 'solr' in group_names or 'zookeeper' in group_names) and environment_variable == 'test'
+
+
+# - name: ensure ubuntu owns their home dir
+#   file: path=/home/ubuntu owner=ubuntu group=ubuntu recurse=yes
+#   remote_user: www
+#   sudo: yes
+
+- name: God passwordless execution
+  copy: src=sudoers dest=/etc/sudoers validate='visudo -cf %s'
+  tags: users
+
+- name: add infrastructure team to the test machines
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=www
+    state=present
+  with_fileglob:
+  - keys/Infrastructure/*
+  when: environment_variable == "test" or environment_variable == "staging"
+  tags: users
+
+- name: add knowledge team to the test www machines
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=www
+    state=present
+  with_fileglob:
+  - keys/knowledge/*
+  when: environment_variable == 'test' and ('kayindex' in group_names or 'web' in group_names) or ('build' in group_names)
+  tags: users
+
+- name: add connectors team to the test www machines
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=www
+    state=present
+  with_fileglob:
+  - keys/connectors/*
+  when: environment_variable == 'test' and ('connectors' in group_names)
+  tags: users
+
+- name: make bob the pub key for the www user on test/stage
+  copy: src={{ item }} dest=/home/www/.ssh mode=0600 owner=www group=www
+  with_fileglob:
+  - keys/bob/*
+  when: environment_variable == 'test' or environment_variable == 'staging' or environment_variable == 'production'
+
+- name: Remove keys ## Make sure this is LAST in the file
+  authorized_key:
+    key="{{ lookup('file',item) }}"
+    user=www
+    state=absent
+  with_fileglob:
+  - keys/Removals/*
+  tags: users
+

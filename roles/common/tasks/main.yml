@@ -1,0 +1,7 @@
+---
+- include: users.yml
+#- include: installs.yml
+#- include: hosts_dhcp.yml
+
+- name: Ensure /tmp is world-writable
+  file: path=/tmp mode=1777

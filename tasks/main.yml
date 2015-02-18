@@ -1,0 +1,19 @@
+---
+
+- include: users.yml tags=users
+
+- include: installs.yml tags=installs
+
+- include: hosts_dhcp.yml tags=dns
+
+- include: logstash.yml tags=logstash
+
+- {include: java.yml, tags: java, when: "{{ group_names | intersect(['zookeeper', 'solr', 'script-test', 'connectors']) }}"}
+
+- {include: mongo_client.yml, tags: mongo, when: "'mongo' not in group_names"}
+
+- include: stackdriver.yml tags=stackdriver
+
+
+- name: Ensure /tmp is world-writable
+  file: path=/tmp mode=1777

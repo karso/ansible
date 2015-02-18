@@ -1,0 +1,17 @@
+# The absence or presence of subnets deletes or creates them respectively.
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+  - name: Create a subnet
+    ec2_vpc:
+        state: present
+        cidr_block: 10.0.0.0/16
+        resource_tags: { "Name":"dev-vpc" }
+        region: us-east-1
+        aws_access_key: 'AKIAJWAUUWXD2G6MLZMA'
+        aws_secret_key: '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'
+        subnets:
+          - cidr: 10.0.1.0/24
+            az: us-east-1a
+            resource_tags: { "Name":"dev-default" }

@@ -1,0 +1,9 @@
+---
+- name: Stop zabbix-agent
+  service: name=zabbix-agent state=stopped
+- name: Remove zabbix-agent
+  apt: name=zabbix-agent* state=absent purge=yes
+  
+- name: Remove config directories
+  file: path=/etc/zabbix/ state=absent  
+  file: path=/var/log/zabbix/ state=absent

@@ -1,0 +1,11 @@
+---
+- name: copy config
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=644
+  notify: restart nginx
+
+- name: copy key and cert
+  copy: src={{ item }} dest=/etc/nginx/conf.d/ owner=root group=root
+  with_items: 
+   - kaybus.com.crt
+   - kaybus.key
+  notify: restart nginx

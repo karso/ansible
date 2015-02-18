@@ -1,0 +1,3 @@
+---
+- name: ensure rabbitmqadmin
+  copy: src=rabbitmqadmin dest=/usr/local/bin/rabbitmqadmin mode=755

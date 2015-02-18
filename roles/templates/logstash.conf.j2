@@ -1,0 +1,85 @@
+input {
+  file {
+    type => "catalina"
+    path => "/var/lib/tomcat7/logs/catalina.*"
+    codec => json {}
+  }
+  file {
+    type => "localhost"
+    path => "/var/lib/tomcat7/logs/localhost.*.log"
+    codec => json {}
+  }
+  file {
+    type => "localhost_access"
+    path => "/var/lib/tomcat7/logs/localhost_access_log.*.txt"
+    codec => json {}
+  }
+  file {
+    type => "log4js"
+    path => "/tmp/assets-boxer.log"
+  }
+  file {
+    type => "log4js"
+    path => "/tmp/reporting.log"
+  }
+  file {
+    type => "log4js"
+    path => "/tmp/policy-identity.log"
+  }
+  file {
+    type => "log4js"
+    path => "/tmp/store_service.log"
+  }
+  file {
+    type => "nginx-access"
+    path => [ "/usr/local/nginx/logs/access.log",
+              "/var/log/nginx/access.log" ]
+  }
+  file {
+    type => "nginx-error"
+    path => [ "/usr/local/nginx/logs/error.log",
+             "/var/log/nginx/error.log" ]
+  }
+  file {
+    type => "sidekiq"
+    path => "/tmp/sidekiq.log"
+  }
+  file {
+    type => "rails"
+    path => "/home/www/public_html/kaybus/current/log/logstash_*.log"
+    codec => json {}
+  }
+  file {
+    type => "mail"
+    path => "/var/log/mail.log"
+  }
+  file {
+    type => "procmail"
+    path => "/home/www/.procmail/log"
+  }
+  file {
+    type => "ssh-access"
+    add_field => {
+      "restricted" => "true"
+    }
+    path => "/var/log/auth.log"
+  }
+}
+
+filter {
+  mutate {
+    add_field => {
+      "enviroment" => "{{environment_variable}}"
+      "hostname"  => "{{inventory_hostname}}"
+    }
+  }
+}
+
+output {
+  redis {
+    host => "logstash.kaybus.net"
+    port => "5000"
+    data_type => "list"
+    key => "logstash"
+  }
+}

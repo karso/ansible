@@ -1,0 +1,7 @@
+---
+- hosts: solr
+  remote_user: www
+  sudo: yes
+  roles:
+  - zabbix_agent_2.0
+#  - zabbix_push_userparam

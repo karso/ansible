@@ -1,0 +1,4 @@
+---
+- include: copy_userparams.yml
+- include: start_zabbix_agent.yml
+

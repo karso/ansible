@@ -1,0 +1,17 @@
+---
+- name: Stackdriver signing key
+  apt_key: url='https://app.stackdriver.com/RPM-GPG-KEY-stackdriver' state=present
+
+- name: Stackdriver Repo
+  apt_repository: repo="deb http://repo.stackdriver.com/apt precise main" state=present
+
+- name: stackdriver api key set
+  debconf: name='stackdriver-agent' question='stackdriver-agent/apikey' vtype='string' value='WM66DIYANJD0JC61LBCF74JKUMBU7YNM'
+
+- name: Install Agents
+  apt: name={{ item }} update_cache=yes state=latest
+  with_items:
+  - stackdriver-agent
+  - stackdriver-extractor
+
+#- name: Add application-specific Stackdriver configs

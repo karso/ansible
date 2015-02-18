@@ -1,0 +1,5 @@
+---
+- name: Add new zabbix-repo
+  copy: src=zabbix_2_2.list dest=/etc/apt/sources.list.d/zabbix_2_2.list owner=root group=root mode=0644
+- name: Update apt with new repo
+  apt: update-cache=yes

@@ -1,0 +1,9 @@
+---
+- hosts: script-test
+  remote_user: www 
+  tasks:
+  - name: start redis
+    service: name=redis-server state=started
+    sudo: yes
+  - name: start nginx
+    service: name=nginx state=started

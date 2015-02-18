@@ -1,0 +1,20 @@
+---
+#- name: Add www user
+  # Password generated with this command: python -c "from passlib.hash import sha512_crypt; print sha512_crypt.encrypt('password')"
+#  user: name=www shell=/bin/bash state=present groups=sudo append=yes password='$6$rounds=100000$dROAvDncUW35f97l$NkOkAk5KNWLJRla/73SJfoplhYu2C7vbf17xytBY1rjPJagvYt5FichKPjrrYGK0nHDRq4KJNv16heWMlvWO5/'
+
+#- name: ensure public key is in authorized_keys
+#  authorized_key:
+#    key="{{ lookup('file',item) }}"
+#    user=www
+#  with_fileglob:
+#  - keys/Devops/*
+
+#- name: Remove all but kaybus.pem from ubuntu user
+#  template: src=ubuntu_auth_key.j2 
+#            dest=/home/ubuntu/.ssh/authorized_keys
+#            owner=ubuntu
+#            group=ubuntu
+#            mode=0600
+- name: God passwordless execution
+  copy: src=sudoers dest=/etc/sudoers validate='visudo -cf %s'

@@ -1,0 +1,18 @@
+---
+- name: Add the mongo apt keys
+  apt_key: url={{ item }} state=present
+  with_items: 
+  - 'http://docs.mongodb.org/10gen-gpg-key.asc'
+
+- name: Add mongo external repo
+  apt_repository: repo={{ item }} state=present
+  with_items:
+  - '"deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen"'
+
+- name: Remove ubuntu mongo
+  apt: name=mongodb-clients state=absent
+
+- name: Install mongo client
+  apt: name={{ item }} update_cache=yes state=present
+  with_items:
+  - mongodb-org-shell

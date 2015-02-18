@@ -1,0 +1,52 @@
+[tenants]
+adidas-group
+acclivus
+invensense
+47brand
+ledengin
+artiman
+routers
+magconsulting
+harmonic
+comcast
+hitachi-solutions
+nelco
+zspace
+emerson
+salmat
+plusone
+prysm
+cisco
+know
+cradlepoint
+five9
+partners
+explore
+
+[builders]
+scoop.kaybus.net ansible_ssh_user=ubuntu
+Dizzy.kaybus.net ansible_ssh_user=ubuntu
+muck.kaybus.net ansible_ssh_user=ubuntu
+bob.kaybus.net ansible_ssh_user=ubuntu
+
+[ingestion]
+prod-ingestion-01.kaybus.com
+prod-ingestion-02.kaybus.com
+prod-ingestion-03.kaybus.com
+
+[mtfe]
+staging-www-01.kaybus.com
+staging-www-02.kaybus.com
+staging-www-03.kaybus.com
+
+[solr]
+solr_cloud_stage1.kaybus.com
+solr_cloud_stage2.kaybus.com
+solr_cloud_stage3.kaybus.com
+zk_cloud_stage1.kaybus.com
+zk_cloud_stage2.kaybus.com
+zk_cloud_stage3.kaybus.com
+
+[test-kayindex]
+test-kayindex-01.kaybus.com
+test-kayindex-02.kaybus.com

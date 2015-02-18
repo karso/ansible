@@ -1,0 +1,56 @@
+---
+
+- name: Ensure python-pycurl is installed
+  apt: pkg=python-pycurl state=installed
+
+- name: Ensure Elasticsearch apt signing key is installed
+  apt_key: url=http://packages.elasticsearch.org/GPG-KEY-elasticsearch state=present
+
+- name: Ensure Logstash repo is added
+  apt_repository: repo="deb http://packages.elasticsearch.org/logstash/1.4/debian stable main" update_cache=yes
+
+- name: Ensure Logstash is installed
+  apt: name=logstash=1.4.1-1-bd507eb state=present
+  register: logstash
+
+- name: Ensure logstash config is in place
+  template: src=logstash.conf.j2 dest=/etc/logstash/conf.d/logstash.conf
+  notify:
+    - restart logstash
+
+- name: Remove logstash-web from startup
+  shell: update-rc.d -f logstash-web remove
+  when: logstash.changed == true
+  notify:
+   - restart logstash
+
+- name: Ensure logstash-web is set to manual startup
+  lineinfile: dest=/etc/init/logstash-web.conf state=present insertafter=EOF line='manual'
+  when: logstash.changed == true
+
+- name: Ensure logstash-web is stopped
+  service: name=logstash-web state=stopped
+
+- name: Add logstash user to the adm group
+  user: 
+   name=logstash
+   groups=adm
+   append=yes
+  notify: restart logstash
+
+- name: ensure rsyslog.d has no funny business
+  file: path={{ item }}
+   state=absent
+  with_items:
+  - /etc/rsyslog.d/logstash.conf
+  - /etc/rsyslog.d/logstash2.conf
+  - /etc/rsyslog.d/test.log
+  notify: restart rsyslog
+
+- name: Check for procmail log dir
+  stat: path=/home/www/.procmail
+  register: procmail
+
+- name: make sure logstash can read procmail logs
+  file: path=/home/www/.procmail/log mode=0644
+  when: procmail.stat.exists == true

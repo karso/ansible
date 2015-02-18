@@ -1,0 +1,16 @@
+---
+- name: run dhclient
+  command: /sbin/dhclient
+  sudo: yes
+
+- name: restart redis-server
+  service: name=redis-server state=restarted
+
+- name: restart logstash
+  service: name=logstash state=restarted
+
+- name: restart interface
+  service: name=network-interface state=restarted args=INTERFACE=eth0
+
+- name: restart rsyslog
+  service: name=rsyslog state=restarted
