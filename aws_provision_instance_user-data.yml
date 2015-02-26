@@ -1,0 +1,39 @@
+- hosts: localhost
+  connection: local
+  gather_facts: False
+
+  tasks:
+  - name: Provision a new instance
+    ec2:
+      profile: vimruls-free-tier-creds
+      region: 'us-east-1'
+      image: 'ami-9a562df2'
+      instance_type: m3.large
+      vpc_subnet_id: subnet-d8fb66af
+      group: skar-all-open
+      instance_tags: { "Name" : "test-machine-01" }
+      assign_public_ip: yes
+      key_name: vimruls_key
+      user_data: |
+        #!/bin/bash
+        touch /home/ubuntu/vimruls_user_data_file.txt
+      volumes:
+        - device_name: /dev/sda1
+          snapshot: snap-085aef82
+          device_type: io1
+          iops: 300
+          volume_size: 30
+          delete_on_termination: true
+        - device_name: /dev/sdb
+          device_type: io1
+          iops: 250
+          volume_size: 100
+      wait: yes
+      wait_timeout: 600
+    register: ec2
+  - name: Add new instance to host group
+    add_host: hostname={{ item.public_ip }} groupname=launched
+    with_items: ec2.instances
+  - name: Wait for SSH to come up
+    wait_for: host={{ item.public_ip }} port=22 delay=60 timeout=320 state=started
+    with_items: ec2.instances
