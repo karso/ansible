@@ -8,26 +8,27 @@
       profile: vimruls-free-tier-creds
       region: 'us-east-1'
       image: 'ami-9a562df2'
-      instance_type: m3.large
+      instance_type: t2.micro
       vpc_subnet_id: subnet-d8fb66af
       group: skar-all-open
-      instance_tags: { "Name" : "test-machine-01" }
+      instance_tags: { "Name" : "test-machine-04" }
       assign_public_ip: yes
       key_name: vimruls_key
-      user_data: |
-        #!/bin/bash
-        touch /home/ubuntu/vimruls_user_data_file.txt
-      volumes:
-        - device_name: /dev/sda1
-          snapshot: snap-085aef82
-          device_type: io1
-          iops: 300
-          volume_size: 30
-          delete_on_termination: true
-        - device_name: /dev/sdb
-          device_type: io1
-          iops: 250
-          volume_size: 100
+#      user_data: |
+#        #!/bin/bash
+#        touch /home/ubuntu/vimruls_user_data_file.txt
+      user_data: " {{ lookup('file', './vimruls_user_data.txt') }} "
+#      volumes:
+#        - device_name: /dev/sda1
+#          snapshot: snap-085aef82
+#          device_type: io1
+#          iops: 300
+#          volume_size: 30
+#          delete_on_termination: true
+#        - device_name: /dev/sdb
+#          device_type: io1
+#          iops: 250
+#          volume_size: 100
       wait: yes
       wait_timeout: 600
     register: ec2

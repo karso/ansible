@@ -1,0 +1,3 @@
+#!/bin/bash
+touch /home/ubuntu/vimruls_user-data_working.txt
+
