@@ -1,0 +1,9 @@
+- hosts: localhost
+  remote_user: vagrant
+  tasks:
+  - name: install nginx
+    apt: name=nginx state=present force=yes
+    sudo: yes
+  - name: start nginx
+    service: name=nginx state=started
+
