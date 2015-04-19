@@ -14,7 +14,7 @@
       group: dev-vpc-infra
       instance_tags: { "Name" : "dev-infra-01" }
       assign_public_ip: yes
-      key_name: kaybus_test
+      key_name: mysite_test
       volumes:
         - device_name: /dev/sda1
           snapshot: snap-89572686
@@ -51,8 +51,8 @@
       aws_access_key: 'AKIAJWAUUWXD2G6MLZMA'
       aws_secret_key: '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'
       command: create
-      zone: kaybus.com
-      record: adtest.kaybus.com
+      zone: mysite.com
+      record: adtest.mysite.com
       type: CNAME
       ttl: 60
       value: "{{ item.public_dns_name }}"

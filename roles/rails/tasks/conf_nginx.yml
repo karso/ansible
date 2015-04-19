@@ -6,6 +6,6 @@
 - name: copy key and cert
   copy: src={{ item }} dest=/etc/nginx/conf.d/ owner=root group=root
   with_items: 
-   - kaybus.com.crt
-   - kaybus.key
+   - mysite.com.crt
+   - mysite.key
   notify: restart nginx

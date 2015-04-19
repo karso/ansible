@@ -8,8 +8,8 @@
       aws_access_key: 'AKIAJWAUUWXD2G6MLZMA'
       aws_secret_key: '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'
       command: create
-      zone: kaybus.com
-      record: adtest.kaybus.com
+      zone: mysite.com
+      record: adtest.mysite.com
       type: CNAME
       ttl: 60
       value: ec2-52-0-62-239.compute-1.amazonaws.com

@@ -24,29 +24,29 @@ partners
 explore
 
 [builders]
-scoop.kaybus.net ansible_ssh_user=ubuntu
-Dizzy.kaybus.net ansible_ssh_user=ubuntu
-muck.kaybus.net ansible_ssh_user=ubuntu
-bob.kaybus.net ansible_ssh_user=ubuntu
+scoop.mysite.net ansible_ssh_user=ubuntu
+Dizzy.mysite.net ansible_ssh_user=ubuntu
+muck.mysite.net ansible_ssh_user=ubuntu
+bob.mysite.net ansible_ssh_user=ubuntu
 
 [ingestion]
-prod-ingestion-01.kaybus.com
-prod-ingestion-02.kaybus.com
-prod-ingestion-03.kaybus.com
+prod-ingestion-01.mysite.com
+prod-ingestion-02.mysite.com
+prod-ingestion-03.mysite.com
 
 [mtfe]
-staging-www-01.kaybus.com
-staging-www-02.kaybus.com
-staging-www-03.kaybus.com
+staging-www-01.mysite.com
+staging-www-02.mysite.com
+staging-www-03.mysite.com
 
 [solr]
-solr_cloud_stage1.kaybus.com
-solr_cloud_stage2.kaybus.com
-solr_cloud_stage3.kaybus.com
-zk_cloud_stage1.kaybus.com
-zk_cloud_stage2.kaybus.com
-zk_cloud_stage3.kaybus.com
+solr_cloud_stage1.mysite.com
+solr_cloud_stage2.mysite.com
+solr_cloud_stage3.mysite.com
+zk_cloud_stage1.mysite.com
+zk_cloud_stage2.mysite.com
+zk_cloud_stage3.mysite.com
 
 [test-kayindex]
-test-kayindex-01.kaybus.com
-test-kayindex-02.kaybus.com
+test-kayindex-01.mysite.com
+test-kayindex-02.mysite.com

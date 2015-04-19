@@ -10,7 +10,7 @@
 #  with_fileglob:
 #  - keys/Devops/*
 
-#- name: Remove all but kaybus.pem from ubuntu user
+#- name: Remove all but mysite.pem from ubuntu user
 #  template: src=ubuntu_auth_key.j2 
 #            dest=/home/ubuntu/.ssh/authorized_keys
 #            owner=ubuntu
